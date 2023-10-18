@@ -1,0 +1,55 @@
+.sideBarContainer{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: 25%;
+}
+
+.sideBarButtons{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 0 0;
+    
+}
+
+.sideBarButtons button{
+    border: none;
+    height: 50px;
+    display: flex;
+    align-items: flex-start;
+    padding: 20px 0px 0px 20%;
+}
+
+.sideBarMainButtons{
+    background-color: white;
+}
+
+.myAppsBtn{
+    background-color: #ededed;
+    font-weight: bold;
+}
+
+.ccouspLogo{
+    width: 40px;
+    height: 40px;
+}
+
+.logoContainer{
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.sideBarFooter{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0px 0px 20%;
+
+}
+
+.sideBarFooter > {
+    
+    margin: 10px 0;
+
+}

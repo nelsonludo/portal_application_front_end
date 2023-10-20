@@ -51,30 +51,46 @@
 }
 
 .searchBar{
-    margin: 5px 5%;
+    margin: 5px 10%;
     border: 2px solid #afabab;
     border-radius: 5px;
     height: 50%;
     align-self: center;
+    display: flex;
 
+}
+.searchBar > svg{
+    padding: 13px 0 10px 10px;
 }
 
 .searchBarInput{
     width: 35vh;
     border:none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 10px 10px 10px 10px;
     outline: none;
 }
 
 .appOptionsButton{
     background-color: inherit;
     border: none;
-    align-self: end;
-}
+    align-self: end;    
+    cursor:pointer;
+  }
+  
+  .appOptionsButton svg {
+    width: 20px;
+    height: 20px;
+    fill: rgb(107, 107, 107);
+  }
 
 .sectionDropDownBtn{
     border: none;
     background-color: inherit;
     font-size: large;
+    justify-content: center;
+}
+
+.sectionDropDownBtn > svg{
+    margin: 0 5px 0 0;
 }

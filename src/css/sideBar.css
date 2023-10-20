@@ -18,12 +18,20 @@
     height: 50px;
     display: flex;
     align-items: flex-start;
-    padding: 20px 0px 0px 20%;
+    
 }
+
 
 .sideBarMainButtons{
     background-color: white;
+    padding: 20px 0px 0px 20%;
 }
+
+.forPadding{
+    padding: 20px 0px 0px 10%;
+
+}
+
 
 .myAppsBtn{
     background-color: #dbdbdb;
@@ -45,12 +53,20 @@
 .sideBarFooter{
     display: flex;
     flex-direction: column;
-    padding: 20px 0px 0px 20%;
-
+    padding: 0 0px 0px 10%;
+    margin: 5% 5% 5% 0;
 }
 
-.sideBarFooter > {
-    
-    margin: 10px 0;
-
+.sideBarMainButtons > svg {
+    margin: 0 10px 0 0;
+    fill: #7a7a7a;
 }
+
+.myAppsBtn > svg{
+    fill: black;
+}
+
+.add > svg {
+    margin: 0 0 0 5px;
+}
+

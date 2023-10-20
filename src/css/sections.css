@@ -1,0 +1,80 @@
+.allSectionsContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 5%;
+    background-color: #ededed;
+    height: 100%;
+    justify-content: flex-start;
+}
+
+.bodyContainer{
+    
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.singleSectionApps{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto ;
+}
+.singleSectionContainer{
+    width:70%;
+    margin:3%;
+
+}
+
+.app{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    margin: 5%;
+    padding: 5%;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    width: auto;
+}
+
+.app > img{
+    width: 50px;
+    height: 50px;
+}
+
+.header{
+    display: flex;
+    justify-content: flex-start ;
+    padding: 1% 0 1% 2%;
+
+
+}
+
+.searchBar{
+    margin: 5px 5%;
+    border: 2px solid #afabab;
+    border-radius: 5px;
+    height: 50%;
+    align-self: center;
+
+}
+
+.searchBarInput{
+    width: 35vh;
+    border:none;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+}
+
+.appOptionsButton{
+    background-color: inherit;
+    border: none;
+    align-self: end;
+}
+
+.sectionDropDownBtn{
+    border: none;
+    background-color: inherit;
+    font-size: large;
+}

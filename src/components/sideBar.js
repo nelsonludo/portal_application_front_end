@@ -7,10 +7,6 @@ export default function SideBar({sectionList, setIsSectionAdd, setIsAppAdd}){
     return(
         <div className="sideBarContainer">
             <div className='sideBarButtons'>
-                <div className='logoContainer'>
-                    <img src='/logo192.png' alt='ccousp logo' className='ccouspLogo'/>
-                    <h4>Ccousp & app name</h4>
-                </div>
                 <button className='myAppsBtn sideBarMainButtons'><span>My apps</span></button>
                 {sectionList.map((section, index) => (
                         <button key={index} className='sectionButton sideBarMainButtons'><span>{section.title}</span></button>

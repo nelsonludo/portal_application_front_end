@@ -10,15 +10,15 @@ const initialAppList = [
     title:"microsoftSuit",
     apps: [
       {
-        image:"",
+        image:"/logo192.png",
         title:"microsoftWindows"
       },
       {
-        image:"",
+        image:"/logo192.png",
         title:"microsoftExcel"
       },
       {
-        image:"",
+        image:"/logo192.png",
         title:"microsoftPowerPoint"
       }
     ]
@@ -27,15 +27,15 @@ const initialAppList = [
     title:"Browsers",
     apps: [
       {
-        image:"",
+        image:"/logo192.png",
         title:"GoogleChrome"
       },
       {
-        image:"",
+        image:"/logo192.png",
         title:"Explorer"
       },
       {
-        image:"",
+        image:"/logo192.png",
         title:"Brave"
       },
     ]
@@ -85,13 +85,25 @@ export default function App() {
   return (
     <div className="App">
       {isSectionAdd && 
-        <AddSection handleAddSectionClick={handleAddSectionClick}/>    
+        <AddSection handleAddSectionClick={handleAddSectionClick} setIsSectionAdd={setIsSectionAdd}/>    
       }
       {isAppAdd && 
-        <AddApp handleAddAppClick={handleAddAppClick} sectionList={sectionList}/>    
+        <AddApp handleAddAppClick={handleAddAppClick} sectionList={sectionList} setIsAppAdd={setIsAppAdd}/>    
       }
-      <SideBar sectionList={sectionList} setIsSectionAdd={setIsSectionAdd} setIsAppAdd={setIsAppAdd}/>
-      <Sections sectionList={sectionList} setSectionList={setSectionList}/>
+        <div className="header">
+          <div className='logoContainer'>
+            <img src='/logo192.png' alt='ccousp logo' className='ccouspLogo'/>
+            <h6>Ccousp & app name</h6>
+          </div>
+          <div className="searchBar">
+              <img src="" alt="🔎"/>
+              <input className="searchBarInput" placeholder="search you apps"/>
+          </div>
+        </div>
+      <div className='appBodyContainer'>
+        <SideBar sectionList={sectionList} setIsSectionAdd={setIsSectionAdd} setIsAppAdd={setIsAppAdd}/>
+        <Sections sectionList={sectionList} setSectionList={setSectionList}/>
+      </div>
     </div>
   );
 }

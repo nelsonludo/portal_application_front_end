@@ -82,6 +82,8 @@ export default function App() {
       setIsAppAdd(false)
     }
 
+  
+
   return (
     <div className="App">
       {isSectionAdd && 
@@ -104,7 +106,7 @@ export default function App() {
         </div>
       <div className='appBodyContainer'>
         <SideBar sectionList={sectionList} setIsSectionAdd={setIsSectionAdd} setIsAppAdd={setIsAppAdd}/>
-        <Sections sectionList={sectionList} setSectionList={setSectionList}/>
+        <Sections sectionList={sectionList} setSectionList={setSectionList} handleAddAppClick={handleAddAppClick}/>
       </div>
     </div>
   );

@@ -1,102 +1,113 @@
-* > button{
-    cursor:pointer;
+* > button {
+  cursor: pointer;
 }
 
-.allSectionsContainer{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 5%;
-    background-color: #ededed;
-    height: 100%;
-    justify-content: flex-start;
+.allSectionsContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 5%;
+  background-color: #ededed;
+  height: 100%;
+  justify-content: flex-start;
 }
 
-.bodyContainer{
-    
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+.bodyContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.singleSectionApps{
-    display: grid;
-    grid-template-columns: auto auto auto auto auto auto ;
+.singleSectionApps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
+  grid-gap: 30px;
+  margin: 4% 0;
 }
-.singleSectionContainer{
-    width:70%;
-    margin:3%;
-
-}
-
-.app{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-    margin: 5%;
-    padding: 5%;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-    width: auto;
+.singleSectionContainer {
+  width: 70%;
+  margin: 3%;
 }
 
-.app > img{
-    width: 50px;
-    height: 50px;
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  margin: 5px;
+  padding: 5%;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  width: 150px;
 }
 
-.header{
-    display: flex;
-    justify-content: flex-start ;
-    padding: 1% 0 1% 2%;
-
-
+.app > img {
+  width: 50px;
+  height: 50px;
 }
 
-.searchBar{
-    margin: 5px 10%;
-    border: 2px solid #afabab;
-    border-radius: 5px;
-    height: 50%;
-    align-self: center;
-    display: flex;
-
-}
-.searchBar > svg{
-    padding: 8px 0 10px 10px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1% 0 1% 2%;
 }
 
-.searchBarInput{
-    width: 35vh;
-    border:none;
-    border-radius: 5px;
-    padding: 10px 10px 10px 10px;
-    outline: none;
+.logoutBtn {
+  margin: 10px 30px;
+  background-color: inherit;
+  border: 2px solid rgb(76, 75, 75);
+  border-radius: 5px;
+  padding: auto;
+  transition: all 0.3s ease;
+  font-weight: bold;
 }
 
-.appOptionsButton{
-    background-color: inherit;
-    border: none;
-    align-self: end;    
-    cursor:pointer;
-  }
-  
-  .appOptionsButton svg {
-    width: 20px;
-    height: 20px;
-    fill: rgb(107, 107, 107);
-  }
-
-.sectionDropDownBtn{
-    border: none;
-    background-color: inherit;
-    font-size: large;
-    justify-content: center;
-    cursor:pointer;
-
+.logoutBtn:hover {
+  background-color: #afabab;
+  color: #ededed;
 }
 
-.sectionDropDownBtn > svg{
-    margin: 0 5px 0 0;
+.searchBar {
+  margin: 5px 10%;
+  border: 2px solid #afabab;
+  border-radius: 5px;
+  height: 50%;
+  align-self: center;
+  display: flex;
+}
+.searchBar > svg {
+  padding: 8px 0 10px 10px;
+}
+
+.searchBarInput {
+  width: 35vh;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 10px 10px 10px;
+  outline: none;
+}
+
+.appOptionsButton {
+  background-color: inherit;
+  border: none;
+  align-self: end;
+  cursor: pointer;
+}
+
+.appOptionsButton svg {
+  width: 20px;
+  height: 20px;
+  fill: rgb(107, 107, 107);
+}
+
+.sectionDropDownBtn {
+  border: none;
+  background-color: inherit;
+  font-size: large;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sectionDropDownBtn > svg {
+  margin: 0 5px 0 0;
 }

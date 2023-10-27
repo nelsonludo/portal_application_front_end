@@ -6,7 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../css/Login.css";
 import { click } from "@testing-library/user-event/dist/click";
 
-const LOGIN_URL = "/auth";
+const LOGIN_URL = "http://siigusp.pheoc.cm/api/token";
 
 //const USER_REGEX = /^[a-ZA-Z][a-zA-Z0-9-_]{3,23}$/;
 //const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -35,24 +35,9 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg("");
+    const origin = window.location.origin;
+    console.log(origin);
   }, [user, pwd]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://siigusp.pheoc.cm/api/auth/");
-        setData(response.data);
-        setLoading(true);
-      } catch (error) {
-        console.error("Error:", error);
-        console.log(clicked);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [clicked]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,14 +50,13 @@ const Login = () => {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = { data: fakeResponseData };
-      //const response =  await axios.post(LOGIN_URL, JSON.stringify(user, pwd), {
-      //   headers: { "Content-Type": "application/json" },
-      //   withCredentials: true,
-      // });
+      const response = await axios.post(LOGIN_URL, JSON.stringify(user, pwd), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
 
       console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response));
+      console.log(JSON.stringify(response));
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
 
@@ -125,24 +109,7 @@ const Login = () => {
           required
         />
         <button>Sign In</button>
-
-        {data ? (
-          <div>
-            <h2>Data:</h2>
-            <ul>
-              {data.map((item) => (
-                <li key={item.id}>
-                  <p>{item.name}</p>
-                  <p>{item.description}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          loading && <p>Loading...</p>
-        )}
       </form>
-      <button onClick={() => setClicked(!clicked)}>test</button>
     </div>
   );
 };

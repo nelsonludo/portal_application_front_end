@@ -9,12 +9,13 @@ export default function AddApp({
   const [title, setTitle] = useState("");
   const [sectionTitle, setSectionTitle] = useState(sectionList[0].title);
   const [image, setImage] = useState("");
-  const [emptyFieldErr, setEmptyFieldErr] = useState("");
+  const [FieldErr, setFieldErr] = useState("");
 
   function handleEmptyFields() {
-    setEmptyFieldErr("Please fill all the fields");
+    setFieldErr("Please fill all the fields");
+
     setTimeout(() => {
-      setEmptyFieldErr("");
+      setFieldErr("");
     }, 2000);
   }
 
@@ -57,7 +58,7 @@ export default function AddApp({
             <button onClick={handleEmptyFields} className="addBtn">
               Add
             </button>
-            <p>{emptyFieldErr}</p>
+            <p>{FieldErr}</p>
           </>
         )}
       </div>

@@ -4,6 +4,7 @@ import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../css/Login.css";
+import { click } from "@testing-library/user-event/dist/click";
 
 const LOGIN_URL = "/auth";
 
@@ -24,6 +25,10 @@ const Login = () => {
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -31,6 +36,23 @@ const Login = () => {
   useEffect(() => {
     setErrMsg("");
   }, [user, pwd]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://siigusp.pheoc.cm/api/auth/");
+        setData(response.data);
+        setLoading(true);
+      } catch (error) {
+        console.error("Error:", error);
+        console.log(clicked);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [clicked]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,7 +125,24 @@ const Login = () => {
           required
         />
         <button>Sign In</button>
+
+        {data ? (
+          <div>
+            <h2>Data:</h2>
+            <ul>
+              {data.map((item) => (
+                <li key={item.id}>
+                  <p>{item.name}</p>
+                  <p>{item.description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          loading && <p>Loading...</p>
+        )}
       </form>
+      <button onClick={() => setClicked(!clicked)}>test</button>
     </div>
   );
 };

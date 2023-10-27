@@ -49,5 +49,5 @@
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15"
   },
-  "homepage": "."
+  "homepage": "http://localhost/build/"
 }

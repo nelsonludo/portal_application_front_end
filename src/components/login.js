@@ -4,9 +4,9 @@ import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../css/Login.css";
-import { click } from "@testing-library/user-event/dist/click";
 
-const LOGIN_URL = "http://siigusp.pheoc.cm/api/token";
+//const LOGIN_URL = "http://siigusp.pheoc.cm/api/token";
+const LOGIN_URL = "http://siigusp.pheoc.cm/api/token/";
 
 //const USER_REGEX = /^[a-ZA-Z][a-zA-Z0-9-_]{3,23}$/;
 //const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -23,6 +23,7 @@ const Login = () => {
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
+  const [name, setName] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
   const [data, setData] = useState(null);
@@ -35,32 +36,35 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg("");
-    const origin = window.location.origin;
-    console.log(origin);
   }, [user, pwd]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log(pwd);
     //this is to test the user login//the accesstoken and roles are optional and might not be used here
-    const fakeResponseData = {
-      accessToken: "your-access-token",
-      roles: ["role1", "role2"],
-    };
-
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await axios.post(LOGIN_URL, JSON.stringify(user, pwd), {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        LOGIN_URL,
+        {
+          username: user,
+          password: pwd,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+        //withCredentials: true,
+      );
 
-      console.log(JSON.stringify(response?.data));
-      console.log(JSON.stringify(response));
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
+      const accessToken = response?.data?.access;
+      const refreshToken = response?.data?.refresh;
+      console.log(accessToken);
+      console.log(refreshToken);
 
-      setAuth({ user, pwd, roles, accessToken });
+      setAuth({ user, pwd, accessToken, refreshToken });
       setUser("");
       setPwd("");
       navigate(from, { replace: true });

@@ -154,12 +154,12 @@ function AppSection({
             className="app"
             draggable
             onDragStart={(e) =>
-              handleOnDrag(e, app.title, app.image, sectionIndex)
+              handleOnDrag(e, app.name, app.image, sectionIndex)
             }
           >
             <button
               className="appOptionsButton"
-              onClick={() => handleDeleteAppClick(app.title)}
+              onClick={() => handleDeleteAppClick(app.name)}
             >
               {" "}
               {/**include every element in the new array created by the filter except the element with the same title */}
@@ -178,7 +178,9 @@ function AppSection({
               alt="this is the app"
             />{" "}
             {/*app.image*/}
-            <span>{app.title}</span>
+            <span>{app.name}</span>
+            <span>{app.description}</span>
+            <a href={app.link}>link to the app</a>
           </div>
         )
       )}

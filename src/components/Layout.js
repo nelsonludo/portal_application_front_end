@@ -1,13 +1,12 @@
-import { Outlet } from "react-router-dom";
-import { useState } from "react";
-
 import SideBar from "./sideBar.js";
 import Sections from "./Sections.js";
 import AddSection from "./addSectionPanel.js";
 import AddApp from "./addAppPanel.js";
 
 import useAuth from "../hooks/useAuth.js";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import axios from "../api/axios";
 
 const initialAppList = [
   {
@@ -15,15 +14,27 @@ const initialAppList = [
     apps: [
       {
         image: "/logo192.png",
-        title: "microsoftWindows",
+        id: 1,
+        name: "microsoftWindows",
+        description: "microsoftWindows Description",
+        link: "https://redcap.pheoc.cm",
+        owner: 2,
       },
       {
         image: "/logo192.png",
-        title: "microsoftExcel",
+        id: 2,
+        name: "microsoftWindows",
+        description: "microsoftWindows Description",
+        link: "https://redcap.pheoc.cm",
+        owner: 2,
       },
       {
         image: "/logo192.png",
-        title: "microsoftPowerPoint",
+        id: 3,
+        name: "microsoftWindows",
+        description: "microsoftWindows Description",
+        link: "https://redcap.pheoc.cm",
+        owner: 2,
       },
     ],
   },
@@ -32,15 +43,27 @@ const initialAppList = [
     apps: [
       {
         image: "/logo192.png",
-        title: "GoogleChrome",
+        id: 1,
+        name: "microsoftWindows",
+        description: "microsoftWindows Description",
+        link: "https://redcap.pheoc.cm",
+        owner: 2,
       },
       {
         image: "/logo192.png",
-        title: "Explorer",
+        id: 2,
+        name: "microsoftWindows",
+        description: "microsoftWindows Description",
+        link: "https://redcap.pheoc.cm",
+        owner: 2,
       },
       {
         image: "/logo192.png",
-        title: "Brave",
+        id: 3,
+        name: "microsoftWindows",
+        description: "microsoftWindows Description",
+        link: "https://redcap.pheoc.cm",
+        owner: 2,
       },
     ],
   },
@@ -50,11 +73,60 @@ const Layout = () => {
   const [sectionList, setSectionList] = useState(initialAppList);
   const [isSectionAdd, setIsSectionAdd] = useState(false);
   const [isAppAdd, setIsAppAdd] = useState(false);
+  const [app, setApp] = useState({});
 
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
+  const accessToken = auth.accessToken;
+  const refreshToken = auth.refreshToken;
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  let headersList = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  useEffect(() => {
+    async function trys() {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        let response = await axios.get("http://siigusp.pheoc.cm/api/apps", {
+          headers: headersList,
+        });
+
+        console.log(response?.data);
+
+        const tryArray = response?.data;
+
+        setApp(tryArray[0]);
+
+        console.log(app);
+      } catch (err) {
+        if (err?.code == "ERR_BAD_REQUEST") {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          const errResponse = await axios.post(
+            "http://siigusp.pheoc.cm/api/token/refresh",
+            {
+              refresh: `${refreshToken}`,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+            //withCredentials: true,
+          );
+
+          const accessToken = errResponse?.data?.access;
+          console.log(accessToken);
+
+          setAuth({ accessToken });
+        }
+      }
+    }
+
+    trys();
+  }, [accessToken]);
 
   function handleAddSectionClick(title) {
     title !== "" &&
@@ -76,13 +148,7 @@ const Layout = () => {
           if (section.title === sectionTitle) {
             return {
               ...section,
-              apps: [
-                ...section.apps,
-                {
-                  title: title,
-                  image: image,
-                },
-              ],
+              apps: [...section.apps, app],
             };
           } else {
             return section;

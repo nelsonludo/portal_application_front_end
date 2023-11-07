@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useRef } from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../css/Login.css";
 
 //const LOGIN_URL = "http://siigusp.pheoc.cm/api/token";
@@ -21,35 +21,38 @@ const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [name, setName] = useState("");
+  const [user, setUser] = useState({
+    name: "",
+    pwd: "",
+  });
   const [errMsg, setErrMsg] = useState("");
+  const [accessToken, setAccessToken] = useState("");
 
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  // const [data, setData] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [clicked, setClicked] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
+    console.log(localStorage.getItem("isLoggedIn"));
   }, []);
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd]);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(pwd);
+    console.log(user.pwd);
     //this is to test the user login//the accesstoken and roles are optional and might not be used here
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await axios.post(
         LOGIN_URL,
         {
-          username: user,
-          password: pwd,
+          username: user.name,
+          password: user.pwd,
         },
         {
           headers: {
@@ -59,14 +62,22 @@ const Login = () => {
         //withCredentials: true,
       );
 
-      const accessToken = response?.data?.access;
+      setAccessToken(response?.data?.access);
+      const isLoggedIn = true;
       const refreshToken = response?.data?.refresh;
+
+      //this is for test reasons
       console.log(accessToken);
       console.log(refreshToken);
 
-      setAuth({ user, pwd, accessToken, refreshToken });
-      setUser("");
-      setPwd("");
+      //globalising the useful variables/states
+      setAuth({ user, accessToken, isLoggedIn });
+
+      // Store the refresh token in browser storage
+      localStorage.setItem("refreshToken", refreshToken);
+
+      localStorage.setItem("isLoggedIn", isLoggedIn);
+
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
@@ -99,8 +110,13 @@ const Login = () => {
           id="username"
           ref={userRef}
           autoComplete="off"
-          onChange={(e) => setUser(e.target.value)}
-          value={user}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              name: e.target.value,
+            })
+          }
+          value={user.name}
           required
         />
 
@@ -108,8 +124,13 @@ const Login = () => {
         <input
           type="password"
           id="password"
-          onChange={(e) => setPwd(e.target.value)}
-          value={pwd}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              pwd: e.target.value,
+            })
+          }
+          value={user.pwd}
           required
         />
         <button>Sign In</button>

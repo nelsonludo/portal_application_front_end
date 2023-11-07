@@ -76,52 +76,102 @@ const Layout = () => {
   const [app, setApp] = useState({});
 
   const { auth, setAuth } = useAuth();
-  const accessToken = auth.accessToken;
-  const refreshToken = auth.refreshToken;
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+
+  let accessToken = auth.accessToken;
+  let isLoggedIn = auth.isLoggedIn;
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  console.log("accessToken from login:", accessToken);
 
   let headersList = {
     Authorization: `Bearer ${accessToken}`,
   };
 
   useEffect(() => {
+    async function RefreshToken() {
+      if (refreshToken) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const errResponse = await axios.post(
+          "http://siigusp.pheoc.cm/api/token/refresh",
+          {
+            refresh: `${refreshToken}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+          //withCredentials: true,
+        );
+
+        accessToken = errResponse?.data?.access;
+        isLoggedIn = true;
+        localStorage.setItem("isLoggedIn", isLoggedIn);
+
+        isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        console.log(accessToken);
+
+        setAuth((prevAuth) => ({ ...prevAuth, accessToken, isLoggedIn }));
+
+        console.log("the auth.isLoggedIn is:", auth.isLoggedIn);
+      } else {
+        isLoggedIn = false;
+        localStorage.setItem("isLoggedIn", isLoggedIn);
+
+        isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        setAuth((prevAuth) => ({ ...prevAuth, isLoggedIn }));
+        console.log("isloggedin is false here");
+        console.log(refreshToken);
+      }
+    }
+
+    RefreshToken();
+  }, []);
+
+  useEffect(() => {
+    console.log("isLoggedIn:", auth.isLoggedIn);
+    console.log("refreshToken:", refreshToken);
+  }, [auth]);
+
+  useEffect(() => {}, []);
+
+  useEffect(() => {
     async function trys() {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         let response = await axios.get("http://siigusp.pheoc.cm/api/apps", {
           headers: headersList,
         });
 
-        console.log(response?.data);
+        console.log("this is the response?.data:", response?.data);
 
         const tryArray = response?.data;
 
         setApp(tryArray[0]);
 
-        console.log(app);
+        console.log("this is the app:", app);
       } catch (err) {
-        if (err?.code == "ERR_BAD_REQUEST") {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          const errResponse = await axios.post(
-            "http://siigusp.pheoc.cm/api/token/refresh",
-            {
-              refresh: `${refreshToken}`,
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        const errResponse = await axios.post(
+          "http://siigusp.pheoc.cm/api/token/refresh",
+          {
+            refresh: `${refreshToken}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
             },
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-            //withCredentials: true,
-          );
+          }
+          //withCredentials: true,
+        );
 
-          const accessToken = errResponse?.data?.access;
-          console.log(accessToken);
+        const accessToken = errResponse?.data?.access;
+        console.log("accessToken from refreshToken:", accessToken);
 
-          setAuth({ accessToken });
-        }
+        setAuth((prevAuth) => ({ ...prevAuth, accessToken }));
       }
     }
 

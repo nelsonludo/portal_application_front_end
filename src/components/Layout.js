@@ -210,7 +210,8 @@ const Layout = () => {
   }
 
   function handleLogout() {
-    navigate("/login");
+    const isLoggedIn = localStorage.setItem("isLoggedIn", false);
+    setAuth((prevAuth) => ({ ...prevAuth, isLoggedIn }));
   }
 
   return (

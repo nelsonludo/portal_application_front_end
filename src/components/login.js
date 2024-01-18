@@ -1,18 +1,17 @@
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useRef } from "react";
-import useAuth from "../hooks/useAuth";
+import useAuth from "./hooks/UseAuth";
 import axios from "../api/axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import "../css/Login.css";
 
 //const LOGIN_URL = "http://siigusp.pheoc.cm/api/token";
-const LOGIN_URL = "http://siigusp.pheoc.cm/api/token/";
 
 //const USER_REGEX = /^[a-ZA-Z][a-zA-Z0-9-_]{3,23}$/;
 //const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAccess, user, setUser } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,12 +20,7 @@ const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState({
-    name: "",
-    pwd: "",
-  });
   const [errMsg, setErrMsg] = useState("");
-  const [accessToken, setAccessToken] = useState("");
 
   // const [data, setData] = useState(null);
   // const [loading, setLoading] = useState(false);
@@ -34,7 +28,6 @@ const Login = () => {
 
   useEffect(() => {
     userRef.current.focus();
-    console.log(localStorage.getItem("isLoggedIn"));
   }, []);
 
   useEffect(() => {
@@ -48,8 +41,8 @@ const Login = () => {
     //this is to test the user login//the accesstoken and roles are optional and might not be used here
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await axios.post(
-        LOGIN_URL,
+      const { data } = await axios.post(
+        "/token/",
         {
           username: user.name,
           password: user.pwd,
@@ -62,21 +55,9 @@ const Login = () => {
         //withCredentials: true,
       );
 
-      setAccessToken(response?.data?.access);
-      const isLoggedIn = true;
-      const refreshToken = response?.data?.refresh;
+      localStorage.setItem("refresh", data?.refresh);
 
-      //this is for test reasons
-      console.log(accessToken);
-      console.log(refreshToken);
-
-      //globalising the useful variables/states
-      setAuth({ user, accessToken, isLoggedIn });
-
-      // Store the refresh token in browser storage
-      localStorage.setItem("refreshToken", refreshToken);
-
-      localStorage.setItem("isLoggedIn", isLoggedIn);
+      setAccess(data?.access);
 
       navigate(from, { replace: true });
     } catch (err) {
@@ -92,6 +73,12 @@ const Login = () => {
       errRef.current.focus();
     }
   };
+
+  if (location.state) {
+    if (location.state.prevRoute.pathname !== "") {
+      return <Navigate to={location.state.prevRoute.pathname} replace />;
+    }
+  }
 
   return (
     <div className="loginContainer">

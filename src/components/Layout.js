@@ -1,9 +1,9 @@
-import SideBar from "./sideBar.js";
+import SideBar from "./SideBar.js";
 import Sections from "./Sections.js";
-import AddSection from "./addSectionPanel.js";
-import AddApp from "./addAppPanel.js";
+import AddSection from "./AddSectionPanel.js";
+import AddApp from "./AddAppPanel.js";
 
-import useAuth from "../hooks/useAuth.js";
+import useAuth from "./hooks/UseAuth.js";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import axios from "../api/axios";
@@ -75,108 +75,34 @@ const Layout = () => {
   const [isAppAdd, setIsAppAdd] = useState(false);
   const [app, setApp] = useState({});
 
-  const { auth, setAuth } = useAuth();
+  const { setUser, setAccess, access, axiosPrivate, refresh, refreshToken } =
+    useAuth();
   const navigate = useNavigate();
 
-  let accessToken = auth.accessToken;
-  let isLoggedIn = auth.isLoggedIn;
-  const refreshToken = localStorage.getItem("refreshToken");
-
-  console.log("accessToken from login:", accessToken);
-
-  let headersList = {
-    Authorization: `Bearer ${accessToken}`,
-  };
+  const accessToken = access;
 
   useEffect(() => {
-    async function RefreshToken() {
-      if (refreshToken) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const errResponse = await axios.post(
-          "http://siigusp.pheoc.cm/api/token/refresh",
-          {
-            refresh: `${refreshToken}`,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-          //withCredentials: true,
-        );
-
-        accessToken = errResponse?.data?.access;
-        isLoggedIn = true;
-        localStorage.setItem("isLoggedIn", isLoggedIn);
-
-        isLoggedIn = localStorage.getItem("isLoggedIn");
-
-        console.log(accessToken);
-
-        setAuth((prevAuth) => ({ ...prevAuth, accessToken, isLoggedIn }));
-
-        console.log("the auth.isLoggedIn is:", auth.isLoggedIn);
-      } else {
-        isLoggedIn = false;
-        localStorage.setItem("isLoggedIn", isLoggedIn);
-
-        isLoggedIn = localStorage.getItem("isLoggedIn");
-
-        setAuth((prevAuth) => ({ ...prevAuth, isLoggedIn }));
-        console.log("isloggedin is false here");
-        console.log(refreshToken);
-      }
-    }
-
-    RefreshToken();
+    refreshToken(refresh);
   }, []);
-
-  useEffect(() => {
-    console.log("isLoggedIn:", auth.isLoggedIn);
-    console.log("refreshToken:", refreshToken);
-  }, [auth]);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     async function trys() {
       try {
         await new Promise((resolve) => setTimeout(resolve, 5000));
-        let response = await axios.get("http://siigusp.pheoc.cm/api/apps", {
-          headers: headersList,
-        });
+        const { data } = await axiosPrivate(accessToken).post("/apps/");
 
-        console.log("this is the response?.data:", response?.data);
+        console.log("this is the response?.data:", data);
 
-        const tryArray = response?.data;
+        const tryArray = data;
 
         setApp(tryArray[0]);
-
-        console.log("this is the app:", app);
       } catch (err) {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        const errResponse = await axios.post(
-          "http://siigusp.pheoc.cm/api/token/refresh",
-          {
-            refresh: `${refreshToken}`,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-          //withCredentials: true,
-        );
-
-        const accessToken = errResponse?.data?.access;
-        console.log("accessToken from refreshToken:", accessToken);
-
-        setAuth((prevAuth) => ({ ...prevAuth, accessToken }));
+        console.log(err);
       }
     }
 
     trys();
-  }, [accessToken]);
+  }, []);
 
   function handleAddSectionClick(title) {
     title !== "" &&
@@ -210,8 +136,11 @@ const Layout = () => {
   }
 
   function handleLogout() {
-    const isLoggedIn = localStorage.setItem("isLoggedIn", false);
-    setAuth((prevAuth) => ({ ...prevAuth, isLoggedIn }));
+    setUser({
+      name: "",
+      pwd: "",
+    });
+    setAccess("");
   }
 
   return (

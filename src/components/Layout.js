@@ -16,6 +16,7 @@ const Layout = () => {
   const [isSectionUpdate, setIsSectionUpdate] = useState(false);
   const [apps, setApps] = useState([]);
   const [currentCategoryId, setCurrentCategoryId] = useState();
+  const [currentCategoryName, setCurrentCategoryName] = useState();
 
   const {
     setUser,
@@ -29,6 +30,17 @@ const Layout = () => {
   const navigate = useNavigate();
 
   const accessToken = access;
+
+  const getAllCategories = async () => {
+    try {
+      const { data } = await axiosPrivate(accessToken).get("/categories/", {});
+
+      console.log(data);
+      setSectionList(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     refreshToken(refresh);
@@ -52,20 +64,6 @@ const Layout = () => {
 
         console.log(data);
         setUser(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    const getAllCategories = async () => {
-      try {
-        const { data } = await axiosPrivate(accessToken).get(
-          "/categories/",
-          {}
-        );
-
-        console.log(data);
-        setSectionList(data);
       } catch (err) {
         console.log(err);
       }
@@ -97,23 +95,26 @@ const Layout = () => {
       console.log(data);
     } catch (err) {
       console.log(err);
+    } finally {
+      getAllCategories();
     }
   };
   const handleUpdateSectionClick = async (title, categoryIndex) => {
     try {
       const { data } = await axiosPrivate(access).put(
-        `/app/category/${categoryIndex}`,
+        `/category/update/${categoryIndex}/`,
         {
           user: user.id,
           name: title,
         }
       );
 
-      setIsSectionUpdate(false);
-
       console.log(data);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsSectionUpdate(false);
+      getAllCategories();
     }
   };
 
@@ -138,6 +139,7 @@ const Layout = () => {
           handleUpdateSectionClick={handleUpdateSectionClick}
           setIsSectionUpdate={setIsSectionUpdate}
           currentId={currentCategoryId}
+          currentName={currentCategoryName}
         />
       )}
       <div className="header">
@@ -165,8 +167,9 @@ const Layout = () => {
           sectionList={sectionList}
           setSectionList={setSectionList}
           apps={apps}
-          defineCategory={setCurrentCategoryId}
-          isUpdateOpen={() => {
+          defineCategoryId={setCurrentCategoryId}
+          defineCategoryName={setCurrentCategoryName}
+          OpenUpdateCategory={() => {
             setIsSectionUpdate(true);
           }}
         />

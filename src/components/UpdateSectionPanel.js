@@ -5,8 +5,9 @@ export default function UpdateSection({
   setIsSectionUpdate,
   handleUpdateSectionClick,
   currentId,
+  currentName,
 }) {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(currentName);
   const [emptyFieldErr, setEmptyFieldErr] = useState("");
 
   function handleEmptyFields() {

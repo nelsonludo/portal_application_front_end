@@ -135,6 +135,11 @@
   padding: 10px;
 }
 
+.reportButtons svg {
+  width: 15px;
+  height: 15px;
+}
+
 .reportButtons > button:hover {
   color: #272e37;
   text-decoration: none;

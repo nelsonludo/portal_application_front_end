@@ -4,6 +4,7 @@ import useAuth from "./hooks/UseAuth.js";
 import Myapps from "./Myapps.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faEdit,
   faEllipsisV,
   faSignIn,
   faTrash,
@@ -15,7 +16,8 @@ export default function Sections({
   sectionList,
   setSectionList,
   apps,
-  defineCategory,
+  defineCategoryId,
+  defineCategoryName,
   OpenUpdateCategory,
 }) {
   const [isActiveList, setIsActiveList] = useState(
@@ -188,17 +190,20 @@ export default function Sections({
                   <button
                     onClick={() => {
                       OpenUpdateCategory();
-                      defineCategory(section.id);
+                      defineCategoryId(section.id);
+                      defineCategoryName(section.name);
                     }}
                   >
-                    Edit Category
+                    Edit Category <FontAwesomeIcon icon={faEdit} size="xs" />
                   </button>
                   <button
+                    style={{ color: "red" }}
                     onClick={() => {
                       handleDeleteSectionClick(section);
                     }}
                   >
-                    Delete Category
+                    Delete Category{" "}
+                    <FontAwesomeIcon icon={faTrashAlt} size="xs" />
                   </button>
                 </div>
               </span>
@@ -220,13 +225,7 @@ export default function Sections({
   );
 }
 
-function AppSection({
-  sectionApps,
-  handleDeleteAppClick,
-  handleOnDrag,
-  sectionIndex,
-  sectionName,
-}) {
+function AppSection({ sectionApps, handleOnDrag, sectionIndex, sectionName }) {
   return (
     <div className="singleSectionApps">
       {sectionApps?.map(

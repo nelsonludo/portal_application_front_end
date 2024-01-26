@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import "../css/addPanel.css";
 
-export default function AddSection({
-  handleAddSectionClick,
-  setIsSectionAdd,
-  toAdd,
-  handleUpdateSectionClick,
-}) {
+export default function AddSection({ handleAddSectionClick, setIsSectionAdd }) {
   const [title, setTitle] = useState("");
   const [emptyFieldErr, setEmptyFieldErr] = useState("");
 
@@ -32,9 +27,7 @@ export default function AddSection({
           <button
             onClick={() => {
               setTitle("");
-              toAdd
-                ? handleAddSectionClick(title)
-                : handleUpdateSectionClick(title);
+              handleAddSectionClick(title);
             }}
             className="addBtn"
           >

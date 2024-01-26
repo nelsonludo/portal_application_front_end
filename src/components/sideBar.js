@@ -24,7 +24,7 @@ export default function SideBar({ sectionList, setIsSectionAdd, setIsAppAdd }) {
           className="sectionButton sideBarMainButtons add"
           onClick={() => setIsSectionAdd(true)}
         >
-          <span>add section</span>
+          <span>Add section</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="1em"

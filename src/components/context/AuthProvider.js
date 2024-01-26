@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       if (access && user.name) {
         refreshToken(refresh);
       }
-    }, 300000);
+    }, 100000);
 
     return () => clearInterval(interval);
   }, [user]);

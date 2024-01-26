@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/sections.css";
+import useAuth from "./hooks/UseAuth.js";
+import Myapps from "./Myapps.js";
 
-export default function Sections({ sectionList, setSectionList }) {
+export default function Sections({ sectionList, setSectionList, apps }) {
   const [isActiveList, setIsActiveList] = useState(
     Array(sectionList.length).fill(false)
   );
 
+  const { access, axiosPrivate, user } = useAuth();
+
+  const accessToken = access;
+
+  useEffect(() => {
+    console.log(accessToken);
+    console.log(apps);
+  }, []);
+
   function handleDeleteAppClick(appTitle) {
     let newSectionList = sectionList.map((section) => {
-      let newApps = section.apps.filter((f) => f.title !== appTitle);
+      let newApps = section.apps.filter((f) => f.name !== appTitle);
       return {
         ...section,
         apps: newApps,
@@ -17,10 +28,21 @@ export default function Sections({ sectionList, setSectionList }) {
     setSectionList(newSectionList);
   }
 
-  function handleOnDrag(e, appTitle, appImage, sectionIndex) {
+  const handleDeleteSectionClick = async (section) => {
+    try {
+      const { data } = await axiosPrivate(accessToken).delete(
+        `/category/delete/${section.id}`
+      );
+      setSectionList(sectionList.filter((f) => f.name !== section?.name));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  function handleOnDrag(e, appIndex, sectionIndex, sectionName) {
     e.dataTransfer.setData(
       "text/plain",
-      `${appTitle}\n${appImage}\n${sectionIndex}`
+      `${appIndex}\n${sectionName}\n${sectionIndex}`
     );
   }
 
@@ -29,33 +51,49 @@ export default function Sections({ sectionList, setSectionList }) {
     console.log("drag over");
   }
 
-  function handleOnDrop(e, sectionIndex) {
+  async function handleOnDrop(e, sectionIndex) {
     const data = e.dataTransfer.getData("text/plain");
-    const [appTitle, appImage, draggedSectionIndex] = data.split("\n");
-
-    if (draggedSectionIndex !== sectionIndex.toString()) {
-      const newSectionList = sectionList.map((section, index) => {
-        if (index === parseInt(draggedSectionIndex)) {
-          const newApps = section.apps.filter((app) => app.title !== appTitle);
-          return {
-            ...section,
-            apps: newApps,
-          };
-        } else if (index === sectionIndex) {
-          const newApps = [
-            ...section.apps,
-            { title: appTitle, image: appImage },
-          ];
-          return {
-            ...section,
-            apps: newApps,
-          };
-        } else {
-          return section;
+    const [appIndex, sectionName] = data.split("\n");
+    //check if the update app category functions also get the category id and the app id
+    try {
+      const { data } = await axiosPrivate(access).put(
+        `/app/category/${appIndex}`,
+        {
+          user: user.id,
+          name: sectionName,
         }
-      });
+      );
 
-      setSectionList(newSectionList);
+      // if (draggedSectionIndex !== sectionIndex.toString()) {
+      //   const newSectionList = sectionList.map((section, index) => {
+      //     if (index === parseInt(draggedSectionIndex)) {
+      //       const newApps = apps
+      //         .filter((i) => i.category === section.name)
+      //         .filter((app) => app.id !== appIndex);
+      //       return {
+      //         ...section,
+      //         apps: newApps,
+      //       };
+      //     } else if (index === sectionIndex) {
+      //       const newApps = [
+      //         ...section.apps,
+      //         { name: appTitle, image: appImage },
+      //       ];
+      //       return {
+      //         ...section,
+      //         apps: newApps,
+      //       };
+      //     } else {
+      //       return section;
+      //     }
+      //   }
+      //   );
+
+      //   setSectionList(newSectionList);
+      // }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -68,6 +106,11 @@ export default function Sections({ sectionList, setSectionList }) {
   return (
     <div className="bodyContainer">
       <div className="allSectionsContainer">
+        <Myapps
+          sectionList={sectionList}
+          setSectionList={setSectionList}
+          appsList={apps}
+        />
         {sectionList.map(
           (
             section,
@@ -100,14 +143,10 @@ export default function Sections({ sectionList, setSectionList }) {
                     <path d="M256 0a256 256 0 1 0 0 512A256 256 0 1 0 256 0zM135 241c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l87 87 87-87c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9L273 345c-9.4 9.4-24.6 9.4-33.9 0L135 241z" />
                   </svg>
                 )}
-                {section.title}
+                {section?.name}
               </button>
               <button
-                onClick={() => {
-                  setSectionList(
-                    sectionList.filter((f) => f.title !== section.title)
-                  );
-                }}
+                onClick={() => handleDeleteSectionClick(section)}
                 className="appOptionsButton"
               >
                 {" "}
@@ -122,10 +161,11 @@ export default function Sections({ sectionList, setSectionList }) {
               </button>
               {isActiveList[index] && (
                 <AppSection
-                  sectionApps={section.apps}
+                  sectionApps={apps.filter((i) => i.category === section.name)}
                   handleDeleteAppClick={handleDeleteAppClick}
                   handleOnDrag={handleOnDrag}
-                  sectionIndex={index}
+                  sectionIndex={section.id}
+                  sectionName={section.name}
                 />
               )}
             </div>
@@ -141,10 +181,11 @@ function AppSection({
   handleDeleteAppClick,
   handleOnDrag,
   sectionIndex,
+  sectionName,
 }) {
   return (
     <div className="singleSectionApps">
-      {sectionApps.map(
+      {sectionApps?.map(
         (
           app,
           index /** mapping through the single section apps array to get all apps in one section */
@@ -154,12 +195,12 @@ function AppSection({
             className="app"
             draggable
             onDragStart={(e) =>
-              handleOnDrag(e, app.name, app.image, sectionIndex)
+              handleOnDrag(e, app.id, sectionIndex, sectionName)
             }
           >
             <button
               className="appOptionsButton"
-              onClick={() => handleDeleteAppClick(app.name)}
+              // onClick=() () => handleDeleteAppClick(app.name)
             >
               {" "}
               {/**include every element in the new array created by the filter except the element with the same title */}

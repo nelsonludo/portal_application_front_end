@@ -1,139 +1,121 @@
 import SideBar from "./SideBar.js";
 import Sections from "./Sections.js";
 import AddSection from "./AddSectionPanel.js";
-import AddApp from "./AddAppPanel.js";
 
 import useAuth from "./hooks/UseAuth.js";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import axios from "../api/axios";
 
-const initialAppList = [
-  {
-    title: "microsoftSuit",
-    apps: [
-      {
-        image: "/logo192.png",
-        id: 1,
-        name: "microsoftWindows",
-        description: "microsoftWindows Description",
-        link: "https://redcap.pheoc.cm",
-        owner: 2,
-      },
-      {
-        image: "/logo192.png",
-        id: 2,
-        name: "microsoftWindows",
-        description: "microsoftWindows Description",
-        link: "https://redcap.pheoc.cm",
-        owner: 2,
-      },
-      {
-        image: "/logo192.png",
-        id: 3,
-        name: "microsoftWindows",
-        description: "microsoftWindows Description",
-        link: "https://redcap.pheoc.cm",
-        owner: 2,
-      },
-    ],
-  },
-  {
-    title: "Browsers",
-    apps: [
-      {
-        image: "/logo192.png",
-        id: 1,
-        name: "microsoftWindows",
-        description: "microsoftWindows Description",
-        link: "https://redcap.pheoc.cm",
-        owner: 2,
-      },
-      {
-        image: "/logo192.png",
-        id: 2,
-        name: "microsoftWindows",
-        description: "microsoftWindows Description",
-        link: "https://redcap.pheoc.cm",
-        owner: 2,
-      },
-      {
-        image: "/logo192.png",
-        id: 3,
-        name: "microsoftWindows",
-        description: "microsoftWindows Description",
-        link: "https://redcap.pheoc.cm",
-        owner: 2,
-      },
-    ],
-  },
-];
+const initialSectionList = [];
 
 const Layout = () => {
-  const [sectionList, setSectionList] = useState(initialAppList);
+  const [sectionList, setSectionList] = useState(initialSectionList);
   const [isSectionAdd, setIsSectionAdd] = useState(false);
   const [isAppAdd, setIsAppAdd] = useState(false);
-  const [app, setApp] = useState({});
+  const [apps, setApps] = useState([]);
 
-  const { setUser, setAccess, access, axiosPrivate, refresh, refreshToken } =
-    useAuth();
+  const {
+    setUser,
+    setAccess,
+    access,
+    axiosPrivate,
+    refresh,
+    refreshToken,
+    user,
+  } = useAuth();
   const navigate = useNavigate();
 
   const accessToken = access;
 
   useEffect(() => {
     refreshToken(refresh);
-  }, []);
 
-  useEffect(() => {
     async function trys() {
       try {
         await new Promise((resolve) => setTimeout(resolve, 5000));
-        const { data } = await axiosPrivate(accessToken).post("/apps/");
-
-        console.log("this is the response?.data:", data);
+        const { data } = await axiosPrivate(accessToken).get("/apps/");
 
         const tryArray = data;
 
-        setApp(tryArray[0]);
+        setApps(tryArray);
       } catch (err) {
         console.log(err);
       }
     }
 
+    const getUserInfo = async () => {
+      try {
+        const { data } = await axiosPrivate(accessToken).get("/user/", {});
+
+        console.log(data);
+        setUser(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const getAllCategories = async () => {
+      try {
+        const { data } = await axiosPrivate(accessToken).get(
+          "/categories/",
+          {}
+        );
+
+        console.log(data);
+        setSectionList(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     trys();
+    getUserInfo();
+    getAllCategories();
   }, []);
 
-  function handleAddSectionClick(title) {
-    title !== "" &&
-      setSectionList([
-        ...sectionList,
-        {
-          title: title,
-          apps: [],
-        },
-      ]);
-    setIsSectionAdd(false);
-  }
+  //test the add section click button to see if it works fine
+  const handleAddSectionClick = async (title) => {
+    try {
+      const { data } = await axiosPrivate(accessToken).post("/category/", {
+        user: user.id,
+        name: title,
+      });
 
-  function handleAddAppClick(title, image, sectionTitle) {
-    title !== "" &&
-      image !== "" &&
-      setSectionList(
-        sectionList.map((section) => {
-          if (section.title === sectionTitle) {
-            return {
-              ...section,
-              apps: [...section.apps, app],
-            };
-          } else {
-            return section;
-          }
-        })
-      );
+      title !== "" &&
+        setSectionList([
+          ...sectionList,
+          {
+            id: sectionList.length + 1,
+            name: title,
+          },
+        ]);
+      setIsSectionAdd(false);
 
-    setIsAppAdd(false);
-  }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // function handleAddAppClick(title, image, sectionTitle) {
+  //   title !== "" &&
+  //     image !== "" &&
+  //     setSectionList(
+  //       sectionList.map((section) => {
+  //         if (section.title === sectionTitle) {
+  //           return {
+  //             ...section,
+  //             apps: [...section.apps, apps],
+  //           };
+  //         } else {
+  //           return section;
+  //         }
+  //       })
+  //     );
+
+  //   setIsAppAdd(false);
+  // }
 
   function handleLogout() {
     setUser({
@@ -151,13 +133,13 @@ const Layout = () => {
           setIsSectionAdd={setIsSectionAdd}
         />
       )}
-      {isAppAdd && (
+      {/* {isAppAdd && (
         <AddApp
           handleAddAppClick={handleAddAppClick}
           sectionList={sectionList}
           setIsAppAdd={setIsAppAdd}
         />
-      )}
+      )} */}
       <div className="header">
         <div className="logoContainer">
           <img src="/cems_logo.png" alt="ccousp logo" className="ccouspLogo" />
@@ -178,15 +160,11 @@ const Layout = () => {
         </button>
       </div>
       <div className="appBodyContainer">
-        <SideBar
-          sectionList={sectionList}
-          setIsSectionAdd={setIsSectionAdd}
-          setIsAppAdd={setIsAppAdd}
-        />
+        <SideBar sectionList={sectionList} setIsSectionAdd={setIsSectionAdd} />
         <Sections
           sectionList={sectionList}
           setSectionList={setSectionList}
-          handleAddAppClick={handleAddAppClick}
+          apps={apps}
         />
       </div>
       <Outlet />

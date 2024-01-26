@@ -2,9 +2,27 @@ import React, { useState, useEffect } from "react";
 import "../css/sections.css";
 import useAuth from "./hooks/UseAuth.js";
 import Myapps from "./Myapps.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEllipsisV,
+  faSignIn,
+  faTrash,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import { isValidDateValue } from "@testing-library/user-event/dist/utils/index.js";
 
-export default function Sections({ sectionList, setSectionList, apps }) {
+export default function Sections({
+  sectionList,
+  setSectionList,
+  apps,
+  defineCategory,
+  OpenUpdateCategory,
+}) {
   const [isActiveList, setIsActiveList] = useState(
+    Array(sectionList.length).fill(false)
+  );
+
+  const [buttonDropdown, setButtonDropdown] = useState(
     Array(sectionList.length).fill(false)
   );
 
@@ -97,6 +115,16 @@ export default function Sections({ sectionList, setSectionList, apps }) {
     }
   }
 
+  function togggleDropdown(index) {
+    try {
+      const newDropdown = [...buttonDropdown];
+      newDropdown[index] = !newDropdown[index];
+      setButtonDropdown(newDropdown);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   function toggleSection(index) {
     const newIsActiveList = [...isActiveList];
     newIsActiveList[index] = !newIsActiveList[index];
@@ -145,20 +173,36 @@ export default function Sections({ sectionList, setSectionList, apps }) {
                 )}
                 {section?.name}
               </button>
-              <button
-                onClick={() => handleDeleteSectionClick(section)}
+              <span
                 className="appOptionsButton"
+                onClick={() => togggleDropdown(index)}
               >
-                {" "}
-                {/**include every element in the new array created by the filter except the element with the same title */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="1em"
-                  viewBox="0 0 448 512"
+                <FontAwesomeIcon icon={faEllipsisV} />
+                <div
+                  className={
+                    buttonDropdown[index]
+                      ? "reportButtons show"
+                      : "reportButtons hide"
+                  }
                 >
-                  <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
-                </svg>
-              </button>
+                  <button
+                    onClick={() => {
+                      OpenUpdateCategory();
+                      defineCategory(section.id);
+                    }}
+                  >
+                    Edit Category
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDeleteSectionClick(section);
+                    }}
+                  >
+                    Delete Category
+                  </button>
+                </div>
+              </span>
+
               {isActiveList[index] && (
                 <AppSection
                   sectionApps={apps.filter((i) => i.category === section.name)}
@@ -198,20 +242,6 @@ function AppSection({
               handleOnDrag(e, app.id, sectionIndex, sectionName)
             }
           >
-            <button
-              className="appOptionsButton"
-              // onClick=() () => handleDeleteAppClick(app.name)
-            >
-              {" "}
-              {/**include every element in the new array created by the filter except the element with the same title */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="1em"
-                viewBox="0 0 448 512"
-              >
-                <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
-              </svg>
-            </button>
             {/**this is temporarily the delete app button i shall add those in the "..." of the app button */}
             <img
               className="appImage"

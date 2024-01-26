@@ -1,5 +1,6 @@
 * > button {
   cursor: pointer;
+  border: none;
 }
 
 .allSectionsContainer {
@@ -92,6 +93,7 @@
   border: none;
   align-self: end;
   cursor: pointer;
+  position: relative;
 }
 
 .appOptionsButton svg {
@@ -110,4 +112,41 @@
 
 .sectionDropDownBtn > svg {
   margin: 0 5px 0 0;
+}
+
+.reportButtons {
+  position: absolute;
+  top: -25%;
+  right: 0;
+  left: 230%;
+  background-color: white;
+  border: 2px solid rgba(128, 128, 128, 0.254);
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(154, 161, 171, 0.52);
+  width: 800%;
+  color: #98a6ad;
+  transition: 0.3s all ease;
+  text-align: center;
+}
+
+.reportButtons > button {
+  color: #6c757d;
+  width: 100%;
+  padding: 10px;
+}
+
+.reportButtons > button:hover {
+  color: #272e37;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
+.show {
+  opacity: 1;
+  z-index: 2;
+}
+
+.hide {
+  opacity: 0;
+  z-index: -1;
 }

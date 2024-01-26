@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "../css/addPanel.css";
 
-export default function AddSection({
-  handleAddSectionClick,
-  setIsSectionAdd,
-  toAdd,
+export default function UpdateSection({
+  setIsSectionUpdate,
   handleUpdateSectionClick,
+  currentId,
 }) {
   const [title, setTitle] = useState("");
   const [emptyFieldErr, setEmptyFieldErr] = useState("");
@@ -20,7 +19,7 @@ export default function AddSection({
   return (
     <div className="mainAddContainer">
       <div className="addContainer">
-        <h2>Add a section</h2>
+        <h2>Update a section</h2>
 
         <input
           placeholder="Add section"
@@ -32,18 +31,17 @@ export default function AddSection({
           <button
             onClick={() => {
               setTitle("");
-              toAdd
-                ? handleAddSectionClick(title)
-                : handleUpdateSectionClick(title);
+
+              handleUpdateSectionClick(title, currentId);
             }}
             className="addBtn"
           >
-            Add
+            Update
           </button>
         ) : (
           <>
             <button onClick={handleEmptyFields} className="addBtn">
-              Add
+              Update
             </button>
             <p>{emptyFieldErr}</p>
           </>
@@ -51,7 +49,7 @@ export default function AddSection({
       </div>
       <div
         className="addContainerBackground"
-        onClick={() => setIsSectionAdd(false)}
+        onClick={() => setIsSectionUpdate(false)}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import SideBar from "./SideBar.js";
 import Sections from "./Sections.js";
 import AddSection from "./AddSectionPanel.js";
+import UpdateSection from "./UpdateSectionPanel.js";
 
 import useAuth from "./hooks/UseAuth.js";
 import { useState, useEffect, useContext } from "react";
@@ -12,8 +13,9 @@ const initialSectionList = [];
 const Layout = () => {
   const [sectionList, setSectionList] = useState(initialSectionList);
   const [isSectionAdd, setIsSectionAdd] = useState(false);
-  const [isAppAdd, setIsAppAdd] = useState(false);
+  const [isSectionUpdate, setIsSectionUpdate] = useState(false);
   const [apps, setApps] = useState([]);
+  const [currentCategoryId, setCurrentCategoryId] = useState();
 
   const {
     setUser,
@@ -97,25 +99,23 @@ const Layout = () => {
       console.log(err);
     }
   };
+  const handleUpdateSectionClick = async (title, categoryIndex) => {
+    try {
+      const { data } = await axiosPrivate(access).put(
+        `/app/category/${categoryIndex}`,
+        {
+          user: user.id,
+          name: title,
+        }
+      );
 
-  // function handleAddAppClick(title, image, sectionTitle) {
-  //   title !== "" &&
-  //     image !== "" &&
-  //     setSectionList(
-  //       sectionList.map((section) => {
-  //         if (section.title === sectionTitle) {
-  //           return {
-  //             ...section,
-  //             apps: [...section.apps, apps],
-  //           };
-  //         } else {
-  //           return section;
-  //         }
-  //       })
-  //     );
+      setIsSectionUpdate(false);
 
-  //   setIsAppAdd(false);
-  // }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   function handleLogout() {
     setUser({
@@ -133,13 +133,13 @@ const Layout = () => {
           setIsSectionAdd={setIsSectionAdd}
         />
       )}
-      {/* {isAppAdd && (
-        <AddApp
-          handleAddAppClick={handleAddAppClick}
-          sectionList={sectionList}
-          setIsAppAdd={setIsAppAdd}
+      {isSectionUpdate && (
+        <UpdateSection
+          handleUpdateSectionClick={handleUpdateSectionClick}
+          setIsSectionUpdate={setIsSectionUpdate}
+          currentId={currentCategoryId}
         />
-      )} */}
+      )}
       <div className="header">
         <div className="logoContainer">
           <img src="/cems_logo.png" alt="ccousp logo" className="ccouspLogo" />
@@ -165,6 +165,10 @@ const Layout = () => {
           sectionList={sectionList}
           setSectionList={setSectionList}
           apps={apps}
+          defineCategory={setCurrentCategoryId}
+          isUpdateOpen={() => {
+            setIsSectionUpdate(true);
+          }}
         />
       </div>
       <Outlet />

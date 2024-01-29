@@ -55,10 +55,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (access && user.name) {
+      if (access && user.email) {
         refreshToken(refresh);
       }
-    }, 70000);
+    }, 300000);
 
     return () => clearInterval(interval);
   }, [user]);

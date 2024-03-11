@@ -17,6 +17,7 @@ export default function App() {
           </RequireAuth>
         }
       />
+      <Route path="*" element={<login />} />
     </Routes>
   );
 }

@@ -5,13 +5,13 @@ import Loading from "../Loading";
 const RequireAuth = ({ children }) => {
   const { refreshTokenLoading, user, access } = useAuth();
 
-  if (refreshTokenLoading && !access) {
-    return <Loading />;
-  }
+  // if (refreshTokenLoading && !access) {
+  //   return <Loading />;
+  // }
 
-  if (!access) {
-    return <Navigate to={"/login"} replace />;
-  }
+  // if (!access) {
+  //   return <Navigate to={"/login"} replace />;
+  // }
 
   return children;
 };

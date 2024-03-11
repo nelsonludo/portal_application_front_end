@@ -70,7 +70,7 @@ const Login = () => {
       } else {
         setErrMsg("Login failed");
       }
-      errRef.current.focus();
+      errRef?.current?.focus();
     }
   };
 
@@ -82,46 +82,57 @@ const Login = () => {
 
   return (
     <div className="loginContainer">
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <h1>Sign In</h1>
-      <form className="loginForm" onSubmit={handleSubmit}>
-        <label htmlFor="username">username:</label>
-        <input
-          type="text"
-          id="username"
-          ref={userRef}
-          autoComplete="off"
-          onChange={(e) =>
-            setUser({
-              ...user,
-              name: e.target.value,
-            })
-          }
-          value={user.name}
-          required
-        />
-
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) =>
-            setUser({
-              ...user,
-              pwd: e.target.value,
-            })
-          }
-          value={user.pwd}
-          required
-        />
-        <button>Sign In</button>
-      </form>
+      <div className="left" />
+      <div className="middle">
+        <img src="cems_logo.png" alt="pheoc_logo" />
+        <h1> SIIGUSP</h1>
+        <h2>Employee Users</h2>
+        <form className="loginForm" onSubmit={handleSubmit}>
+          <div className="block">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  name: e.target.value,
+                })
+              }
+              value={user.name}
+              required
+            />
+          </div>
+          <div className="block">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  pwd: e.target.value,
+                })
+              }
+              value={user.pwd}
+              required
+            />
+          </div>
+          <button>Sign In</button>
+        </form>
+        <div className="externalUsers">
+          <div className="or">
+            <div className="orRight" />
+            <span>OR</span>
+            <div className="orLeft" />
+          </div>
+          <h2>External Users</h2>
+          <button>Sign In</button>
+        </div>
+      </div>
+      <div className="right" />
     </div>
   );
 };

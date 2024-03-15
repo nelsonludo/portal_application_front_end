@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faEllipsisV,
+  faInfoCircle,
   faSignIn,
   faTrash,
   faTrashAlt,
@@ -207,7 +208,7 @@ export default function Sections({
                   </button>
                 </div>
               </span>
-
+              <tryStruff />
               {isActiveList[index] && (
                 <AppSection
                   sectionApps={apps.filter((i) => i.category === section.name)}
@@ -228,6 +229,7 @@ export default function Sections({
 function AppSection({ sectionApps, handleOnDrag, sectionIndex, sectionName }) {
   return (
     <div className="singleSectionApps">
+      blob
       {sectionApps?.map(
         (
           app,
@@ -241,7 +243,10 @@ function AppSection({ sectionApps, handleOnDrag, sectionIndex, sectionName }) {
               handleOnDrag(e, app.id, sectionIndex, sectionName)
             }
           >
-            {/**this is temporarily the delete app button i shall add those in the "..." of the app button */}
+            <div className="topIcons">
+              <FontAwesomeIcon icon={faTrash} color="red" />
+              <FontAwesomeIcon icon={faInfoCircle} />
+            </div>{" "}
             <img
               className="appImage"
               src="/logo192.png"

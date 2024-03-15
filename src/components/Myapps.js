@@ -1,6 +1,22 @@
 import React, { useState } from "react";
 import "../css/sections.css";
 import useAuth from "./hooks/UseAuth.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faInfoCircle,
+  faTrash,
+  faTimesCircle,
+  faCheckCircle,
+  faArrowAltCircleDown,
+  faArrowCircleDown,
+  faArrowDownShortWide,
+  faArrowCircleUp,
+  faArrowTrendDown,
+  faArrowsAlt,
+  faFileArrowDown,
+  faChevronCircleUp,
+  faChevronCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Myapps({ sectionList, setSectionList, appsList }) {
   const [IsActive, setIsActive] = useState(false);
@@ -92,21 +108,9 @@ export default function Myapps({ sectionList, setSectionList, appsList }) {
     <div className="singleSectionContainer">
       <button className="sectionDropDownBtn" onClick={toggleSection}>
         {IsActive ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="1em"
-            viewBox="0 0 512 512"
-          >
-            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z" />
-          </svg>
+          <FontAwesomeIcon icon={faChevronCircleDown} />
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="1em"
-            viewBox="0 0 512 512"
-          >
-            <path d="M256 0a256 256 0 1 0 0 512A256 256 0 1 0 256 0zM135 241c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l87 87 87-87c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9L273 345c-9.4 9.4-24.6 9.4-33.9 0L135 241z" />
-          </svg>
+          <FontAwesomeIcon icon={faChevronCircleUp} />
         )}
         My Apps
       </button>
@@ -144,6 +148,14 @@ function AppSection({
             }
           >
             {/**this is temporarily the delete app button i shall add those in the "..." of the app button */}
+            <div className="topIcons">
+              <span>
+                <FontAwesomeIcon icon={faInfoCircle} color="grey" size="xs" />
+              </span>
+              <span>
+                <FontAwesomeIcon icon={faTrash} color="#da2525" size="xs" />
+              </span>
+            </div>{" "}
             <img
               className="appImage"
               src="/logo192.png"

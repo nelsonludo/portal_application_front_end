@@ -155,3 +155,15 @@
   opacity: 0;
   z-index: -1;
 }
+
+.topIcons {
+  height: 10px;
+  align-self: flex-end;
+  display: flex;
+  justify-content: space-around;
+  width: 25%;
+}
+
+.topIcons span {
+  cursor: pointer;
+}

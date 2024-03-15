@@ -14,7 +14,26 @@ const Layout = () => {
   const [sectionList, setSectionList] = useState(initialSectionList);
   const [isSectionAdd, setIsSectionAdd] = useState(false);
   const [isSectionUpdate, setIsSectionUpdate] = useState(false);
-  const [apps, setApps] = useState([]);
+  const [apps, setApps] = useState([
+    {
+      name: "Kobocollect",
+      description: "Application for rapid data redistribution",
+      link: "http://kf.kobo.pheoc.org",
+      category: "Default",
+    },
+    {
+      name: "Kobocollect",
+      description: "Application for rapid data collection",
+      link: "http://kf.kobo.pheoc.org",
+      category: "Default",
+    },
+    {
+      name: "Kobocollect",
+      description: "Application for rapid data collection",
+      link: "http://kf.kobo.pheoc.org",
+      category: "Default",
+    },
+  ]);
   const [currentCategoryId, setCurrentCategoryId] = useState();
   const [currentCategoryName, setCurrentCategoryName] = useState();
 

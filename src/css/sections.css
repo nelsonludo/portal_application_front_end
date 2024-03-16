@@ -17,13 +17,15 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  max-height: 91vh;
+  overflow: auto;
 }
 
 .singleSectionApps {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
   grid-gap: 30px;
-  margin: 4% 0;
+  margin: 2% 0;
 }
 .singleSectionContainer {
   width: 70%;
@@ -40,6 +42,10 @@
   border-radius: 5px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
   width: 150px;
+  height: 180px;
+  border: 1px solid #80808075;
+  justify-content: space-around;
+  font-weight: 500;
 }
 
 .app > img {
@@ -56,7 +62,7 @@
 .logoutBtn {
   margin: 10px 30px;
   background-color: inherit;
-  border: 2px solid rgb(76, 75, 75);
+  border: 2px solid #80808075;
   border-radius: 5px;
   padding: auto;
   transition: all 0.3s ease;
@@ -166,4 +172,11 @@
 
 .topIcons span {
   cursor: pointer;
+}
+
+.sectionTopContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: auto;
 }

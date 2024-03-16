@@ -1,31 +1,27 @@
-* > button{
-  cursor:pointer;
+* > button {
+  cursor: pointer;
 }
 
-
-.App{
+.App {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
-  
+  height: fit-content;
 }
-.appBodyContainer{
+.appBodyContainer {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100vh;
-  
 }
 
-.logoContainer{
+.logoContainer {
   display: flex;
 }
 
-.logoContainer > h6{
+.logoContainer > h6 {
   margin: 5px 0 5px 0;
 }
 
-.logoContainer > img{
+.logoContainer > img {
   margin: 0 10px 0 0;
 }

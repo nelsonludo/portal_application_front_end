@@ -82,7 +82,6 @@ const Login = () => {
 
   return (
     <div className="loginContainer">
-      <div className="left" />
       <div className="middle">
         <img src="cems_logo.png" alt="pheoc_logo" />
         <h1> SIIGUSP</h1>
@@ -132,7 +131,6 @@ const Login = () => {
           <button>Sign In</button>
         </div>
       </div>
-      <div className="right" />
     </div>
   );
 };

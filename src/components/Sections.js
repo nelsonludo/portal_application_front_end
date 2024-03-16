@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faEllipsisV,
-  faInfoCircle,
-  faSignIn,
   faTrash,
   faTrashAlt,
+  faChevronCircleUp,
+  faChevronCircleDown,
 } from "@fortawesome/free-solid-svg-icons";
-import { isValidDateValue } from "@testing-library/user-event/dist/utils/index.js";
+
+import MouseOverPopover from "./Popover.js";
 
 export default function Sections({
   sectionList,
@@ -38,16 +39,16 @@ export default function Sections({
     console.log(apps);
   }, []);
 
-  function handleDeleteAppClick(appTitle) {
-    let newSectionList = sectionList.map((section) => {
-      let newApps = section.apps.filter((f) => f.name !== appTitle);
-      return {
-        ...section,
-        apps: newApps,
-      };
-    });
-    setSectionList(newSectionList);
-  }
+  const handleDeleteAppClick = async (app) => {
+    try {
+      const { data } = await axiosPrivate(accessToken).delete(
+        `/app/delete/${app.id}`
+      );
+      setSectionList(apps.filter((f) => f.title !== app?.title));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleDeleteSectionClick = async (section) => {
     try {
@@ -85,33 +86,6 @@ export default function Sections({
         }
       );
 
-      // if (draggedSectionIndex !== sectionIndex.toString()) {
-      //   const newSectionList = sectionList.map((section, index) => {
-      //     if (index === parseInt(draggedSectionIndex)) {
-      //       const newApps = apps
-      //         .filter((i) => i.category === section.name)
-      //         .filter((app) => app.id !== appIndex);
-      //       return {
-      //         ...section,
-      //         apps: newApps,
-      //       };
-      //     } else if (index === sectionIndex) {
-      //       const newApps = [
-      //         ...section.apps,
-      //         { name: appTitle, image: appImage },
-      //       ];
-      //       return {
-      //         ...section,
-      //         apps: newApps,
-      //       };
-      //     } else {
-      //       return section;
-      //     }
-      //   }
-      //   );
-
-      //   setSectionList(newSectionList);
-      // }
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -153,62 +127,60 @@ export default function Sections({
               onDrop={(e) => handleOnDrop(e, index)}
               onDragOver={handleDragOver}
             >
-              <button
-                className="sectionDropDownBtn"
-                onClick={() => toggleSection(index)}
-              >
-                {isActiveList[index] ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 0 512 512"
-                  >
-                    <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 0 512 512"
-                  >
-                    <path d="M256 0a256 256 0 1 0 0 512A256 256 0 1 0 256 0zM135 241c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l87 87 87-87c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9L273 345c-9.4 9.4-24.6 9.4-33.9 0L135 241z" />
-                  </svg>
-                )}
-                {section?.name}
-              </button>
-              <span
-                className="appOptionsButton"
-                onClick={() => togggleDropdown(index)}
-              >
-                <FontAwesomeIcon icon={faEllipsisV} />
-                <div
-                  className={
-                    buttonDropdown[index]
-                      ? "reportButtons show"
-                      : "reportButtons hide"
-                  }
+              <div className="sectionTopContainer">
+                <button
+                  className="sectionDropDownBtn"
+                  onClick={() => toggleSection(index)}
                 >
-                  <button
-                    onClick={() => {
-                      OpenUpdateCategory();
-                      defineCategoryId(section.id);
-                      defineCategoryName(section.name);
-                    }}
+                  {isActiveList[index] ? (
+                    <FontAwesomeIcon
+                      icon={faChevronCircleDown}
+                      size="sm"
+                      color="#7a7a7a"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faChevronCircleUp}
+                      size="sm"
+                      color="#7a7a7a"
+                    />
+                  )}
+                  {section?.name}
+                </button>
+                <span
+                  className="appOptionsButton"
+                  onClick={() => togggleDropdown(index)}
+                >
+                  <FontAwesomeIcon icon={faEllipsisV} />
+                  <div
+                    className={
+                      buttonDropdown[index]
+                        ? "reportButtons show"
+                        : "reportButtons hide"
+                    }
                   >
-                    Edit Category <FontAwesomeIcon icon={faEdit} size="xs" />
-                  </button>
-                  <button
-                    style={{ color: "red" }}
-                    onClick={() => {
-                      handleDeleteSectionClick(section);
-                    }}
-                  >
-                    Delete Category{" "}
-                    <FontAwesomeIcon icon={faTrashAlt} size="xs" />
-                  </button>
-                </div>
-              </span>
-              <tryStruff />
+                    <button
+                      onClick={() => {
+                        OpenUpdateCategory();
+                        defineCategoryId(section.id);
+                        defineCategoryName(section.name);
+                      }}
+                    >
+                      Edit Category <FontAwesomeIcon icon={faEdit} size="xs" />
+                    </button>
+                    <button
+                      style={{ color: "red" }}
+                      onClick={() => {
+                        handleDeleteSectionClick(section);
+                      }}
+                    >
+                      Delete Category{" "}
+                      <FontAwesomeIcon icon={faTrashAlt} size="xs" />
+                    </button>
+                  </div>
+                </span>
+              </div>
+
               {isActiveList[index] && (
                 <AppSection
                   sectionApps={apps.filter((i) => i.category === section.name)}
@@ -226,10 +198,15 @@ export default function Sections({
   );
 }
 
-function AppSection({ sectionApps, handleOnDrag, sectionIndex, sectionName }) {
+function AppSection({
+  sectionApps,
+  handleOnDrag,
+  sectionIndex,
+  sectionName,
+  handleDeleteAppClick,
+}) {
   return (
     <div className="singleSectionApps">
-      blob
       {sectionApps?.map(
         (
           app,
@@ -244,8 +221,16 @@ function AppSection({ sectionApps, handleOnDrag, sectionIndex, sectionName }) {
             }
           >
             <div className="topIcons">
-              <FontAwesomeIcon icon={faTrash} color="red" />
-              <FontAwesomeIcon icon={faInfoCircle} />
+              <span>
+                <MouseOverPopover data={app} />
+              </span>
+              <span
+                onClick={() => {
+                  handleDeleteAppClick(app);
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash} color="#da2525" size="xs" />
+              </span>
             </div>{" "}
             <img
               className="appImage"
@@ -254,7 +239,7 @@ function AppSection({ sectionApps, handleOnDrag, sectionIndex, sectionName }) {
             />{" "}
             {/*app.image*/}
             <span>{app.name}</span>
-            <span>{app.description}</span>
+            {/* <span>{app.description}</span> */}
             <a href={app.link}>link to the app</a>
           </div>
         )

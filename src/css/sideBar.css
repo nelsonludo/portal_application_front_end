@@ -1,79 +1,72 @@
-button{
-    cursor:pointer;
+button {
+  cursor: pointer;
 }
 
-
-.sideBarContainer{
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    width: 15%;
-    justify-content: space-between;
+.sideBarContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 15%;
+  justify-content: space-between;
+  height: 91vh;
 }
 
-.sideBarButtons{
-    display: flex;
-    flex-direction: column;
-    padding: 0 0 0 0;
-    
+.sideBarButtons {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 0 0;
 }
 
-.sideBarButtons button{
-    border: none;
-    height: 50px;
-    display: flex;
-    align-items: flex-start;
-    cursor:pointer;
-
-    
+.sideBarButtons button {
+  border: none;
+  height: 50px;
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
 }
 
-
-.sideBarMainButtons{
-    background-color: white;
-    padding: 20px 0px 0px 20%;
+.sideBarMainButtons {
+  background-color: white;
+  padding: 20px 0px 0px 20%;
 }
 
-.forPadding{
-    padding: 20px 0px 0px 10%;
-
+.forPadding {
+  padding: 20px 0px 0px 10%;
 }
 
-
-.myAppsBtn{
-    background-color: #dbdbdb;
-    font-weight: bold;
+.myAppsBtn {
+  background-color: #dbdbdb;
+  font-weight: bold;
 }
 
-.ccouspLogo{
-    width: 40px;
-    height: 40px;
+.ccouspLogo {
+  width: 40px;
+  height: 40px;
 }
 
-.logoContainer{
-    display: flex;
-    padding: 10px 0;
-    align-items: center;
-    justify-content: center;
+.logoContainer {
+  display: flex;
+  padding: 10px 0;
+  align-items: center;
+  justify-content: center;
 }
 
-.sideBarFooter{
-    display: flex;
-    flex-direction: column;
-    padding: 0 0px 0px 10%;
-    margin: 5% 5% 5% 0;
+.sideBarFooter {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0px 0px 10%;
+  margin: 5% 5% 5% 0;
 }
 
 .sideBarMainButtons > svg {
-    margin: 0 10px 0 0;
-    fill: #7a7a7a;
+  margin: 0 10px 0 0;
+  fill: #7a7a7a;
 }
 
-.myAppsBtn > svg{
-    fill: black;
+.myAppsBtn > svg {
+  fill: black;
 }
 
 .add > svg {
-    margin: 0 0 0 5px;
+  margin: 0 0 0 5px;
 }
-

@@ -8,10 +8,21 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import axios from "../api/axios";
 
-const initialSectionList = [];
-
 const Layout = () => {
-  const [sectionList, setSectionList] = useState(initialSectionList);
+  const [sectionList, setSectionList] = useState([
+    {
+      id: 1,
+      name: "Default",
+    },
+    {
+      id: 4,
+      name: "Research apps",
+    },
+    {
+      id: 6,
+      name: "Testing",
+    },
+  ]);
   const [isSectionAdd, setIsSectionAdd] = useState(false);
   const [isSectionUpdate, setIsSectionUpdate] = useState(false);
   const [apps, setApps] = useState([
@@ -101,14 +112,14 @@ const Layout = () => {
         name: title,
       });
 
-      title !== "" &&
-        setSectionList([
-          ...sectionList,
-          {
-            id: sectionList.length + 1,
-            name: title,
-          },
-        ]);
+      // title !== "" &&
+      //   setSectionList([
+      //     ...sectionList,
+      //     {
+      //       id: sectionList.length + 1,
+      //       name: title,
+      //     },
+      //   ]);
       setIsSectionAdd(false);
 
       console.log(data);

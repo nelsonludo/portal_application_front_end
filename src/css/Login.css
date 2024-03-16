@@ -4,7 +4,7 @@
   height: 100vh;
   font-size: large;
   font-weight: bold;
-  background-color: white;
+  background-color: #f7cc3cde;
   position: relative;
   overflow: hidden;
 }
@@ -13,14 +13,6 @@
 .right {
   width: 50%;
   height: inherit;
-}
-
-.left {
-  background-color: #da2525;
-}
-
-.right {
-  background-color: #fbb83c;
 }
 
 .middle {

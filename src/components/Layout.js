@@ -9,42 +9,10 @@ import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import axios from "../api/axios";
 
 const Layout = () => {
-  const [sectionList, setSectionList] = useState([
-    {
-      id: 1,
-      name: "Default",
-    },
-    {
-      id: 4,
-      name: "Research apps",
-    },
-    {
-      id: 6,
-      name: "Testing",
-    },
-  ]);
+  const [sectionList, setSectionList] = useState([]);
   const [isSectionAdd, setIsSectionAdd] = useState(false);
   const [isSectionUpdate, setIsSectionUpdate] = useState(false);
-  const [apps, setApps] = useState([
-    {
-      name: "Kobocollect",
-      description: "Application for rapid data redistribution",
-      link: "http://kf.kobo.pheoc.org",
-      category: "Default",
-    },
-    {
-      name: "Kobocollect",
-      description: "Application for rapid data collection",
-      link: "http://kf.kobo.pheoc.org",
-      category: "Default",
-    },
-    {
-      name: "Kobocollect",
-      description: "Application for rapid data collection",
-      link: "http://kf.kobo.pheoc.org",
-      category: "Default",
-    },
-  ]);
+  const [apps, setApps] = useState([]);
   const [currentCategoryId, setCurrentCategoryId] = useState();
   const [currentCategoryName, setCurrentCategoryName] = useState();
 
@@ -65,7 +33,6 @@ const Layout = () => {
     try {
       const { data } = await axiosPrivate(accessToken).get("/categories/", {});
 
-      console.log(data);
       setSectionList(data);
     } catch (err) {
       console.log(err);
@@ -92,7 +59,6 @@ const Layout = () => {
       try {
         const { data } = await axiosPrivate(accessToken).get("/user/", {});
 
-        console.log(data);
         setUser(data);
       } catch (err) {
         console.log(err);

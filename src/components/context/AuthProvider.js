@@ -38,7 +38,6 @@ export const AuthProvider = ({ children }) => {
       );
 
       setAccess(data?.access);
-      console.log("access token refreshed");
     } catch (error) {
       setUser({
         name: "",

@@ -34,11 +34,6 @@ export default function Sections({
 
   const accessToken = access;
 
-  useEffect(() => {
-    console.log(accessToken);
-    console.log(apps);
-  }, []);
-
   const handleDeleteAppClick = async (app) => {
     try {
       const { data } = await axiosPrivate(accessToken).delete(

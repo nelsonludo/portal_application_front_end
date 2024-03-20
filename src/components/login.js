@@ -37,7 +37,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(user.pwd);
     //this is to test the user login//the accesstoken and roles are optional and might not be used here
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));

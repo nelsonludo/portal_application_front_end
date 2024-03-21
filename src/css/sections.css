@@ -60,11 +60,10 @@
 }
 
 .logoutBtn {
-  margin: 10px 0 10px 190px;
+  margin: 10px 10px 10px 0px;
   background-color: inherit;
   border: 2px solid #80808075;
   border-radius: 5px;
-
   transition: all 0.3s ease;
   font-weight: bold;
 }

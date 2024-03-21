@@ -48,6 +48,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const displayError = (dislpayErrorObject) => {
+    dislpayErrorObject.setErrMsg({
+      display: true,
+      msg: dislpayErrorObject.message,
+    });
+    setTimeout(() => {
+      dislpayErrorObject.setErrMsg({ display: false });
+    }, 30000);
+
+    if (dislpayErrorObject.good) {
+      dislpayErrorObject.setErrMsg({
+        display: true,
+        msg: dislpayErrorObject.message,
+        good: true,
+      });
+      setTimeout(() => {
+        dislpayErrorObject.setErrMsg({ display: false });
+      }, 30000);
+    }
+  };
+
   useEffect(() => {
     refreshToken(refresh);
   }, []);
@@ -73,6 +94,7 @@ export const AuthProvider = ({ children }) => {
         refreshToken,
         refresh,
         refreshTokenLoading,
+        displayError,
       }}
     >
       {children}

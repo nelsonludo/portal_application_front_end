@@ -21,6 +21,7 @@ export default function Sections({
   defineCategoryId,
   defineCategoryName,
   OpenUpdateCategory,
+  setErrMsg,
 }) {
   const [isActiveList, setIsActiveList] = useState(
     Array(sectionList.length).fill(false)
@@ -30,7 +31,7 @@ export default function Sections({
     Array(sectionList.length).fill(false)
   );
 
-  const { access, axiosPrivate, user } = useAuth();
+  const { access, axiosPrivate, user, displayError } = useAuth();
 
   const accessToken = access;
 
@@ -40,6 +41,11 @@ export default function Sections({
         `/app/delete/${app.id}`
       );
       setSectionList(apps.filter((f) => f.title !== app?.title));
+      displayError({
+        message: "App removed from section Successfully!",
+        setErrMsg: setErrMsg,
+        good: true,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -51,6 +57,11 @@ export default function Sections({
         `/category/delete/${section.id}`
       );
       setSectionList(sectionList.filter((f) => f.name !== section?.name));
+      displayError({
+        message: "Section Deleted Successfully!",
+        setErrMsg: setErrMsg,
+        good: true,
+      });
     } catch (err) {
       console.log(err);
     }

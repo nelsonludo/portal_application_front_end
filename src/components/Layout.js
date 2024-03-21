@@ -7,6 +7,7 @@ import useAuth from "./hooks/UseAuth.js";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import axios from "../api/axios";
+import ErrorMsg from "./ErrorMsg.js";
 
 const Layout = () => {
   const [sectionList, setSectionList] = useState([]);
@@ -15,6 +16,10 @@ const Layout = () => {
   const [apps, setApps] = useState([]);
   const [currentCategoryId, setCurrentCategoryId] = useState();
   const [currentCategoryName, setCurrentCategoryName] = useState();
+  const [ErrMsg, setErrMsg] = useState({
+    display: false,
+    msg: "",
+  });
 
   const {
     setUser,
@@ -24,10 +29,33 @@ const Layout = () => {
     refresh,
     refreshToken,
     user,
+    displayError,
   } = useAuth();
   const navigate = useNavigate();
 
   const accessToken = access;
+
+  useEffect(() => {
+    if (ErrMsg.display) {
+      const timer = setTimeout(() => {
+        setErrMsg({ display: false });
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [ErrMsg.display]);
+
+  useEffect(() => {
+    if (user?.first_name) {
+      displayError({
+        message: "Welcom Back !",
+        setErrMsg: setErrMsg,
+        good: true,
+      });
+    }
+  }, [user]);
 
   const getAllCategories = async () => {
     try {
@@ -72,23 +100,25 @@ const Layout = () => {
 
   //test the add section click button to see if it works fine
   const handleAddSectionClick = async (title) => {
+    if (!title) {
+      displayError({
+        message: "Please fill all the fields",
+        setErrMsg: setErrMsg,
+      });
+    }
+
     try {
       const { data } = await axiosPrivate(accessToken).post("/category/", {
         user: user.id,
         name: title,
       });
 
-      // title !== "" &&
-      //   setSectionList([
-      //     ...sectionList,
-      //     {
-      //       id: sectionList.length + 1,
-      //       name: title,
-      //     },
-      //   ]);
       setIsSectionAdd(false);
-
-      console.log(data);
+      displayError({
+        message: "Section Added Successfully!",
+        setErrMsg: setErrMsg,
+        good: true,
+      });
     } catch (err) {
       console.log(err);
     } finally {
@@ -105,7 +135,11 @@ const Layout = () => {
         }
       );
 
-      console.log(data);
+      displayError({
+        message: "Section Updated Successfully!",
+        setErrMsg: setErrMsg,
+        good: true,
+      });
     } catch (err) {
       console.log(err);
     } finally {
@@ -156,6 +190,7 @@ const Layout = () => {
         <button className="logoutBtn" onClick={handleLogout}>
           Log out
         </button>
+        <ErrorMsg errorMsg={ErrMsg} />
       </div>
       <div className="appBodyContainer">
         <SideBar sectionList={sectionList} setIsSectionAdd={setIsSectionAdd} />
@@ -168,6 +203,7 @@ const Layout = () => {
           OpenUpdateCategory={() => {
             setIsSectionUpdate(true);
           }}
+          setErrMsg={setErrMsg}
         />
       </div>
       <Outlet />

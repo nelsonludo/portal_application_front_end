@@ -4,6 +4,7 @@ import useAuth from "./hooks/UseAuth";
 import axios from "../api/axios";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import "../css/Login.css";
+import ErrorMsg from "./ErrorMsg";
 
 //const LOGIN_URL = "http://siigusp.pheoc.cm/api/token";
 
@@ -11,7 +12,7 @@ import "../css/Login.css";
 //const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Login = () => {
-  const { setAccess, user, setUser } = useAuth();
+  const { setAccess, user, setUser, displayError } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,7 +21,22 @@ const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [errMsg, setErrMsg] = useState("");
+  const [ErrMsg, setErrMsg] = useState({
+    display: false,
+    msg: "",
+  });
+
+  useEffect(() => {
+    if (ErrMsg.display) {
+      const timer = setTimeout(() => {
+        setErrMsg({ display: false, msg: "" });
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [ErrMsg.display]);
 
   // const [data, setData] = useState(null);
   // const [loading, setLoading] = useState(false);
@@ -37,6 +53,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!user.name || !user.pwd) {
+      displayError({
+        message: "Please fill all the fields",
+        setErrMsg: setErrMsg,
+      });
+    }
     //this is to test the user login//the accesstoken and roles are optional and might not be used here
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -59,15 +81,19 @@ const Login = () => {
       setAccess(data?.access);
 
       navigate(from, { replace: true });
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No server response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Missing username or password");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorised");
+    } catch (error) {
+      if (error.response?.status === 400) {
+        displayError({
+          message: "Please fill all the fields",
+          setErrMsg: setErrMsg,
+        });
+      } else if (error.response?.status === 401) {
+        displayError({
+          message: "Email or password incorrect",
+          setErrMsg: setErrMsg,
+        });
       } else {
-        setErrMsg("Login failed");
+        displayError({ message: "Login failed", setErrMsg: setErrMsg });
       }
       errRef?.current?.focus();
     }
@@ -81,6 +107,7 @@ const Login = () => {
 
   return (
     <div className="loginContainer">
+      <ErrorMsg errorMsg={ErrMsg} />
       <div className="middle">
         <img src="cems_logo.png" alt="pheoc_logo" />
         <h1> SIIGUSP</h1>
